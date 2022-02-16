@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Untitled</title>
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/Features-Clean.css">
-    <link rel="stylesheet" href="assets/css/styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static "/bootstrap/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "/css/styles.css" %}">
 </head>
 
 <body>
@@ -27,36 +27,36 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-primary number satu" type="button">1</button>
-                        <button class="btn btn-primary number" type="button number">2</button>
-                        <button class="btn btn-primary number tiga" type="button number">3</button>
+                        <button class="btn btn-primary number satu" type="button" id="button_one">1</button>
+                        <button class="btn btn-primary number" type="button number" id="button_two">2</button>
+                        <button class="btn btn-primary number tiga" type="button number" id="button_three">3</button>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-primary number" type="button">4</button>
-                        <button class="btn btn-primary number" type="button">5</button>
-                        <button class="btn btn-primary number" type="button">6</button>
+                        <button class="btn btn-primary number" type="button" id="button_four">4</button>
+                        <button class="btn btn-primary number" type="button" id="button_five">5</button>
+                        <button class="btn btn-primary number" type="button" id="button_six">6</button>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-primary number" type="button">7</button>
-                        <button class="btn btn-primary number" type="button">8</button>
-                        <button class="btn btn-primary number" type="button">9</button>
+                        <button class="btn btn-primary number" type="button" id="button_seven">7</button>
+                        <button class="btn btn-primary number" type="button" id="button_eight">8</button>
+                        <button class="btn btn-primary number" type="button" id="button_nine">9</button>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-primary number play" type="button">Play</button>
-                        <button class="btn btn-primary number" type="button">0</button>
-                        <button class="btn btn-primary number del" type="button">Del</button>
+                        <button class="btn btn-primary number play" type="button" id="button_play">Play</button>
+                        <button class="btn btn-primary number" type="button" id="button_zero">0</button>
+                        <button class="btn btn-primary number del" type="button" id="button_delete">Del</button>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,8 @@
     <section>
 
     </section>
-    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="{% static "/bootstrap/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "/javascript/index.js" %}"></script>
 </body>
 
 </html>
