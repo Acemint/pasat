@@ -2,10 +2,11 @@
 class Game {
     constructor() {
         this.currentlyPlaying = false;
-        this.rounds = 30;
+        this.rounds = 5;
         this.score = 0;
-        this.speed = 2000;
+        this.speed = 3000;
         this.limit = 9;
+        this.correctAnswer = 0;
     }
     changeGameSettings(rounds, speed, limit) {
         this.rounds = rounds;
@@ -23,12 +24,16 @@ class Game {
         }
     }
     playAudio(audioHTMLObject) {
-        console.log(audioHTMLObject);
         var audio = new Audio(audioHTMLObject);
         audio.play();
     }
-    pauser() {
-        console.log("Pausing");
+    checkAnswer(userInput, correctAnswer) {
+        if (userInput.currentNumber == correctAnswer) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
     }
 }
 class UserInput {
@@ -41,10 +46,10 @@ class Numpad {
         this.numpadName = numpadName;
         this.inputNumber = inputNumber;
     }
-    setNumpadFunctinoality(numpad) {
+    setNumpadFunctinoality(numpad, userInput) {
         var number = document.getElementById(this.numpadName);
         number.addEventListener("click", function () {
-            console.log(numpad.inputNumber);
+            userInput.currentNumber = numpad.inputNumber;
         });
     }
 }
@@ -59,42 +64,49 @@ function main() {
         numberList.set(1, 0);
         var curRounds = 0;
         var curNumber = 0;
+        var min = 1;
+        var max = 0;
         var intervalID1 = setInterval(function () {
-            if (curRounds == game.rounds)
-                window.clearInterval(intervalID1);
+            userInput.currentNumber = 0;
             if (curRounds % 2 == 0) {
-                curNumber = Math.floor(Math.random() * (game.limit - numberList.get(1) + 1)) + 0;
+                max = game.limit - 1 - numberList.get(1);
+                curNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                 numberList.set(0, curNumber);
-                console.log(numberList.get(0));
             }
             else {
-                curNumber = Math.floor(Math.random() * (game.limit - numberList.get(0) + 1)) + 0;
+                max = game.limit - 1 - numberList.get(0);
+                curNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                 numberList.set(1, curNumber);
-                console.log(numberList.get(1));
             }
             game.playAudio(numberAndFilenameMap.get(curNumber));
-            console.log(`Rounds: ${curRounds} Answer: ${numberList.get(0) + numberList.get(1)}`);
+            setTimeout(() => {
+                if (curRounds > 1) {
+                    var ans = game.checkAnswer(userInput, numberList.get(0) + numberList.get(1));
+                    if (ans == 1) {
+                        game.correctAnswer += ans;
+                        console.log("Correct");
+                    }
+                }
+                ;
+                if (curRounds == game.rounds + 1) {
+                    window.clearInterval(intervalID1);
+                    console.log(`Final Score: ${game.correctAnswer}`);
+                }
+            }, game.speed - 200);
+            console.log(`Answer: ${numberList.get(0) + numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
             curRounds += 1;
         }, game.speed);
-        // setTimeout(() => {
-        //     var intervalID2 = setInterval(function(){
-        //         if(curRounds == game.rounds / 2){
-        //             window.clearInterval(intervalID2);
-        //         }
-        //         numberList.set(1, Math.floor(Math.random() * (game.limit - 0 + 1)) + 0);
-        //         game.playAudio(numberAndFilenameMap.get(numberList.get(1)));
-        //     }, game.speed * 2);
-        // }, game.speed);
     });
     // Set the numpad to its functionality
+    var userInput = new UserInput();
     var numpadArrayName = ["button_zero", "button_one", "button_two", "button_three", "button_four", "button_five", "button_six", "button_seven", "button_eight", "button_nine"];
     for (var i = 0; i < numpadArrayName.length; i++) {
         var numpad = new Numpad(numpadArrayName[i], i);
-        numpad.setNumpadFunctinoality(numpad);
+        numpad.setNumpadFunctinoality(numpad, userInput);
     }
     const numberAndFilenameMap = new Map();
-    var filenameSFX = ["sfx_0", "sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
-    var number = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+    var filenameSFX = ["sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
+    var number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     for (var i = 0; i < filenameSFX.length; i++) {
         numberAndFilenameMap.set(number[i], "/static/sfx/" + filenameSFX[i] + ".wav");
     }
