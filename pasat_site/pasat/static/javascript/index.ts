@@ -36,39 +36,88 @@ class Game {
         var audio = new Audio(audioHTMLObject);
         audio.play();
     }
-
-    checkAnswer(userInput: UserInput, correctAnswer: number){
-        if(userInput.currentNumber == correctAnswer){
-            return 1;
-        }
-        else{
-            return 0;
-        }
-    }
 }
 
 class UserInput {
     currentNumber: number;
-
+    displayNumber: HTMLElement;
+    numberList = new Map();
+    
+        
     constructor(){
         this.currentNumber = 0;
+        this.displayNumber = document.getElementById("display_number")!;
+        this.numberList.set(0, 0);
+        this.numberList.set(1, 0);
+    }
+
+    activateNumpad(arrayNumpad: Array<Numpad>, changeTo: boolean){
+        for(let i = 0; i < arrayNumpad.length; i++){
+            arrayNumpad[i].checkAnswerToggle(changeTo);
+        }
+    }
+
+    changeNumber(numpadNum: number){
+        this.currentNumber = numpadNum;
+        this.displayNumber.textContent = numpadNum.toString();
+    }
+
+    clearContent(){
+        this.currentNumber = 0;
+        this.displayNumber.textContent = "-";
+    }
+
+    changeColor(correct: number){
+        if(correct == 1){
+            this.displayNumber.style.color = "green";
+        }
+        else{
+            this.displayNumber.style.color = "red";
+        }
+    }
+
+    clearColor(){
+        this.displayNumber.style.color = "black";
+    }
+
+    checkAnswer(){
+        return this.currentNumber == this.numberList.get(0) + this.numberList.get(1) ? 1 : 0;
+    }
+
+    getNumber(num: number){
+        return this.numberList.get(num);
     }
 }
 
 class Numpad {
     numpadName: string;
     inputNumber: number;
-    
+    answer: boolean;
+
     constructor(numpadName: string, inputNumber: number){
         this.numpadName = numpadName;
         this.inputNumber = inputNumber;
+        this.answer = false;
     }
 
-    setNumpadFunctinoality(numpad: Numpad, userInput: UserInput){
+    setNumpadFunctinoality(numpad: Numpad, userInput: UserInput, game: Game, numpadList: Array<Numpad>){
         var number = document.getElementById(this.numpadName)!;
         number.addEventListener("click", function(){
-            userInput.currentNumber = numpad.inputNumber;
+            userInput.changeNumber(numpad.inputNumber);
+            if(numpad.answer == true){
+                var answer = userInput.checkAnswer();
+                userInput.changeColor(answer);
+                game.correctAnswer += answer;
+                if(answer == 1){
+                    console.log("Correct");
+                    userInput.activateNumpad(numpadList, false);
+                }
+            }
         }); 
+    }
+
+    checkAnswerToggle(changeTo: boolean){
+        this.answer = changeTo;
     }
 }
 
@@ -79,48 +128,43 @@ function main(){
 
     startButton.addEventListener("click", function () {
         game.toggle();
-        
-        var numberList = new Map();
-        numberList.set(0, 0);
-        numberList.set(1, 0);
 
         var curRounds = 0;
-        var curNumber = 0;
+        var tempNumber = 0;
         var min = 1;
         var max = 0;
         
         var intervalID1 = setInterval(function(){
             userInput.currentNumber = 0;
-
+            
+            userInput.clearContent();
+            userInput.clearColor();
+            userInput.activateNumpad(numpadList, false);
+            
             if(curRounds % 2 == 0){
-                max = game.limit - 1 - numberList.get(1);
-                curNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                numberList.set(0, curNumber);
+                max = game.limit - 1 - userInput.getNumber(1);
+                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                userInput.numberList.set(0, tempNumber);
             }
             else{
-                max = game.limit - 1 - numberList.get(0);
-                curNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                numberList.set(1, curNumber);
+                max = game.limit - 1 - userInput.getNumber(0);
+                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                userInput.numberList.set(1, tempNumber);
             }
-            game.playAudio(numberAndFilenameMap.get(curNumber));
+            game.playAudio(numberAndFilenameMap.get(tempNumber));
 
-            setTimeout(() => {
-                if(curRounds > 1){
-                    var ans =  game.checkAnswer(userInput, numberList.get(0) + numberList.get(1));
-                    if (ans == 1){
-                        game.correctAnswer += ans;
-                        console.log("Correct");
-                    }
-                };
+            if(curRounds != 0){
+                userInput.activateNumpad(numpadList, true);
+            }
+            
+            console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
+            setTimeout(function(){
                 if(curRounds == game.rounds + 1){
                     window.clearInterval(intervalID1)
                     console.log(`Final Score: ${game.correctAnswer}`);
                 }
-                
             }, game.speed - 200);
-            console.log(`Answer: ${numberList.get(0) + numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
-
-           
+                
             curRounds += 1;
         }, game.speed);
     });
@@ -128,10 +172,12 @@ function main(){
     
     // Set the numpad to its functionality
     var userInput = new UserInput(); 
+    var numpadList = Array<Numpad>();
     var numpadArrayName = ["button_zero", "button_one", "button_two", "button_three", "button_four", "button_five", "button_six", "button_seven", "button_eight", "button_nine"];
     for (var i = 0; i < numpadArrayName.length; i++) {
         var numpad = new Numpad(numpadArrayName[i], i);
-        numpad.setNumpadFunctinoality(numpad, userInput);
+        numpadList.push(numpad);
+        numpad.setNumpadFunctinoality(numpad, userInput, game, numpadList);
     }
 
     const numberAndFilenameMap = new Map();
