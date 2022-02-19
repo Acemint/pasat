@@ -24,6 +24,7 @@ class Game {
         }
     }
     playAudio(audioHTMLObject) {
+        console.log(audioHTMLObject);
         var audio = new Audio(audioHTMLObject);
         audio.play();
     }
