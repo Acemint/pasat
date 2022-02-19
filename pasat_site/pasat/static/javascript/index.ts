@@ -21,15 +21,8 @@ class Game {
         this.limit = limit;
     }
 
-    toggle(){
-        if(this.currentlyPlaying == false){
-            document.getElementById("button_play")!.textContent = "Pause";
-            this.currentlyPlaying = true;
-        }
-        else{
-            document.getElementById("button_play")!.textContent = "Play";
-            this.currentlyPlaying = false;
-        }
+    toggle(toggleTo: boolean){
+        this.currentlyPlaying = toggleTo;
     }
 
     playAudio(audioHTMLObject: string){
@@ -127,47 +120,59 @@ function main(){
     var game = new Game();
     var startButton = document.getElementById("button_play")!;
 
+    var intervalGame: any;
     startButton.addEventListener("click", function () {
-        game.toggle();
-
-        var curRounds = 0;
-        var tempNumber = 0;
-        var min = 1;
-        var max = 0;
+        if(game.currentlyPlaying == true){
+            return;
+        }
+        else{
+            game.toggle(true);
         
-        var intervalID1 = setInterval(function(){
-            userInput.currentNumber = 0;
+            var curRounds = 0;
+            var tempNumber = 0;
+            var min = 1;
+            var max = 0;
             
-            userInput.clearContent();
-            userInput.clearColor();
-            userInput.activateNumpad(numpadList, false);
-            
-            if(curRounds % 2 == 0){
-                max = game.limit - 1 - userInput.getNumber(1);
-                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                userInput.numberList.set(0, tempNumber);
-            }
-            else{
-                max = game.limit - 1 - userInput.getNumber(0);
-                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                userInput.numberList.set(1, tempNumber);
-            }
-            game.playAudio(numberAndFilenameMap.get(tempNumber));
-
-            if(curRounds != 0){
-                userInput.activateNumpad(numpadList, true);
-            }
-            
-            console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
-            setTimeout(function(){
-                if(curRounds == game.rounds + 1){
-                    window.clearInterval(intervalID1)
-                    console.log(`Final Score: ${game.correctAnswer}`);
-                }
-            }, game.speed - 200);
+            intervalGame = setInterval(function(){
+                userInput.currentNumber = 0;
                 
-            curRounds += 1;
-        }, game.speed);
+                userInput.clearContent();
+                userInput.clearColor();
+                userInput.activateNumpad(numpadList, false);
+                
+                if(curRounds % 2 == 0){
+                    max = game.limit - 1 - userInput.getNumber(1);
+                    tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                    userInput.numberList.set(0, tempNumber);
+                }
+                else{
+                    max = game.limit - 1 - userInput.getNumber(0);
+                    tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                    userInput.numberList.set(1, tempNumber);
+                }
+                game.playAudio(numberAndFilenameMap.get(tempNumber));
+    
+                if(curRounds != 0){
+                    userInput.activateNumpad(numpadList, true);
+                }
+                
+                console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
+                setTimeout(function(){
+                    if(curRounds == game.rounds + 1){
+                        window.clearInterval(intervalGame);
+                        console.log(`Final Score: ${game.correctAnswer}`);
+                    }
+                }, game.speed - 200);
+                    
+                curRounds += 1;
+            }, game.speed);
+        }
+    });
+
+    var resetButton = document.getElementById("button_reset")!;
+    resetButton.addEventListener("click", function () {
+        game.toggle(false);
+        window.clearInterval(intervalGame);
     });
 
     

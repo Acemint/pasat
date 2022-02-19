@@ -13,15 +13,8 @@ class Game {
         this.speed = speed;
         this.limit = limit;
     }
-    toggle() {
-        if (this.currentlyPlaying == false) {
-            document.getElementById("button_play").textContent = "Pause";
-            this.currentlyPlaying = true;
-        }
-        else {
-            document.getElementById("button_play").textContent = "Play";
-            this.currentlyPlaying = false;
-        }
+    toggle(toggleTo) {
+        this.currentlyPlaying = toggleTo;
     }
     playAudio(audioHTMLObject) {
         console.log(audioHTMLObject);
@@ -97,40 +90,51 @@ function main() {
     // Start the game
     var game = new Game();
     var startButton = document.getElementById("button_play");
+    var intervalGame;
     startButton.addEventListener("click", function () {
-        game.toggle();
-        var curRounds = 0;
-        var tempNumber = 0;
-        var min = 1;
-        var max = 0;
-        var intervalID1 = setInterval(function () {
-            userInput.currentNumber = 0;
-            userInput.clearContent();
-            userInput.clearColor();
-            userInput.activateNumpad(numpadList, false);
-            if (curRounds % 2 == 0) {
-                max = game.limit - 1 - userInput.getNumber(1);
-                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                userInput.numberList.set(0, tempNumber);
-            }
-            else {
-                max = game.limit - 1 - userInput.getNumber(0);
-                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                userInput.numberList.set(1, tempNumber);
-            }
-            game.playAudio(numberAndFilenameMap.get(tempNumber));
-            if (curRounds != 0) {
-                userInput.activateNumpad(numpadList, true);
-            }
-            console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
-            setTimeout(function () {
-                if (curRounds == game.rounds + 1) {
-                    window.clearInterval(intervalID1);
-                    console.log(`Final Score: ${game.correctAnswer}`);
+        if (game.currentlyPlaying == true) {
+            return;
+        }
+        else {
+            game.toggle(true);
+            var curRounds = 0;
+            var tempNumber = 0;
+            var min = 1;
+            var max = 0;
+            intervalGame = setInterval(function () {
+                userInput.currentNumber = 0;
+                userInput.clearContent();
+                userInput.clearColor();
+                userInput.activateNumpad(numpadList, false);
+                if (curRounds % 2 == 0) {
+                    max = game.limit - 1 - userInput.getNumber(1);
+                    tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                    userInput.numberList.set(0, tempNumber);
                 }
-            }, game.speed - 200);
-            curRounds += 1;
-        }, game.speed);
+                else {
+                    max = game.limit - 1 - userInput.getNumber(0);
+                    tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                    userInput.numberList.set(1, tempNumber);
+                }
+                game.playAudio(numberAndFilenameMap.get(tempNumber));
+                if (curRounds != 0) {
+                    userInput.activateNumpad(numpadList, true);
+                }
+                console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
+                setTimeout(function () {
+                    if (curRounds == game.rounds + 1) {
+                        window.clearInterval(intervalGame);
+                        console.log(`Final Score: ${game.correctAnswer}`);
+                    }
+                }, game.speed - 200);
+                curRounds += 1;
+            }, game.speed);
+        }
+    });
+    var resetButton = document.getElementById("button_reset");
+    resetButton.addEventListener("click", function () {
+        game.toggle(false);
+        window.clearInterval(intervalGame);
     });
     // Set the numpad to its functionality
     var userInput = new UserInput();
