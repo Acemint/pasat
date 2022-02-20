@@ -5,9 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>PASAT</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static "/bootstrap/css/bootstrap.min.css" %}">
-    <link rel="stylesheet" href="{% static "/css/styles.css" %}">
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../static/css/styles.css">
 </head>
 
 <body>
@@ -22,7 +21,7 @@
     </nav>
     <section style="background: #FFEDA9;">
         <div class="row align-items-center display">
-            <div class="col display-num">-</div>
+            <div class="col display-num" id="display_number">-</div>
         </div>
     </section>
     <section>
@@ -59,7 +58,7 @@
                     <div class="btn-group" role="group">
                         <button class="btn btn-primary number play" type="button" id="button_play">Play</button>
                         <button class="btn btn-primary number" type="button" id="button_zero">0</button>
-                        <button class="btn btn-primary number del" type="button" id="button_delete">Reset</button>
+                        <button class="btn btn-primary number del" type="button" id="button_reset">Reset</button>
                     </div>
                 </div>
             </div>
