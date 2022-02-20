@@ -71,3 +71,8 @@ body {
     background-color: #FFEDA9;
     border: none;
 }
+
+.waktu {
+    user-select: none;
+    font-size: 28px;
+}
