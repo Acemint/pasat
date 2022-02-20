@@ -57,3 +57,17 @@ body {
     flex-grow: 1;
     justify-content: space-between;
 }
+
+.fas {
+    font-size: 20px;
+}
+
+.close {
+    background-color: white;
+    border: none;
+}
+
+.menu {
+    background-color: #FFEDA9;
+    border: none;
+}
