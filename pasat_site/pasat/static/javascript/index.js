@@ -7,6 +7,8 @@ class Game {
         this.speed = 3000;
         this.limit = 9;
         this.correctAnswer = 0;
+        this.gameCurrentRounds = document.getElementById("countdown_rounds");
+        this.resultModal = document.getElementById("resultContent");
     }
     changeGameSettings(rounds, speed, limit) {
         this.rounds = rounds;
@@ -20,6 +22,12 @@ class Game {
         console.log(audioHTMLObject);
         var audio = new Audio(audioHTMLObject);
         audio.play();
+    }
+    decreaseRounds(round) {
+        this.gameCurrentRounds.innerText = (round).toString();
+    }
+    resultsShow() {
+        this.resultModal.innerText = `Correct inputs: ${this.correctAnswer}\nWrong inputs: ${this.rounds - this.correctAnswer}`;
     }
 }
 class UserInput {
@@ -125,8 +133,10 @@ function main() {
                     if (curRounds == game.rounds + 1) {
                         window.clearInterval(intervalGame);
                         console.log(`Final Score: ${game.correctAnswer}`);
+                        game.resultsShow();
                     }
                 }, game.speed - 200);
+                game.decreaseRounds(game.rounds - curRounds);
                 curRounds += 1;
             }, game.speed);
         }

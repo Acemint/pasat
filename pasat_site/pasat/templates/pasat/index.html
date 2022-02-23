@@ -14,15 +14,15 @@
     <nav class="navbar navbar-light navbar-expand-md" style="padding-left: 10px; padding-right: 10px; background-color: #FFEDA9;">
         <div class="container-fluid">
             <button class="menu" data-toggle="modal" data-target="#menuModal"><span class="navbar-toggler-icon"></span></button>
-            <div class="waktu">
-                30
+            <div class="waktu" id="countdown_rounds">
+                
             </div>
             <button class="menu" data-toggle="modal" data-target="#resultModal"><span><i class="fas fa-trophy"></i></span></button>
         </div>
     </nav>
     <section style="background: #FFEDA9;">
         <div class="row align-items-center display">
-            <div class="col display-num">-</div>
+            <div class="col display-num" id="display_number">-</div>
         </div>
     </section>
     <section>
@@ -59,7 +59,7 @@
                     <div class="btn-group" role="group">
                         <button class="btn btn-primary number play" type="button" id="button_play">Play</button>
                         <button class="btn btn-primary number" type="button" id="button_zero">0</button>
-                        <button class="btn btn-primary number del" type="button" id="button_delete">Reset</button>
+                        <button class="btn btn-primary number del" type="button" id="button_reset">Reset</button>
                     </div>
                 </div>
             </div>
@@ -93,15 +93,15 @@
     </div>
 
     <div class="modal fade" id="resultModal" role="dialog">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Result</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true" id="hiddenResults">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="resultContent">
                     Correct inputs: 
                     <br>
                     Wrong inputs: 
@@ -112,11 +112,11 @@
             </div>
         </div>
     </div>
-    <script src="{% static "/bootstrap/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "/javascript/index.js" %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../static/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../../static/javascript/index.js"></script>
 </body>
 
 </html>
