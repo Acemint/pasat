@@ -7,6 +7,7 @@ class Game {
     correctAnswer: number;
     gameCurrentRounds: HTMLElement;
     resultModal: any;
+    resultText: any;
 
     constructor(){
         this.currentlyPlaying = false;
@@ -16,7 +17,8 @@ class Game {
         this.limit = 9;
         this.correctAnswer = 0;
         this.gameCurrentRounds = document.getElementById("countdown_rounds")!;
-        this.resultModal = document.getElementById("resultContent")!;
+        this.resultModal = document.getElementById("resultShower")!;
+        this.resultText = document.getElementById("resultContent");
     }
 
     changeGameSettings(rounds: number, speed: number, limit: number){
@@ -40,7 +42,13 @@ class Game {
     }
     
     resultsShow(){
-        this.resultModal.innerText = `Correct inputs: ${this.correctAnswer}\nWrong inputs: ${this.rounds - this.correctAnswer}`;
+        this.resultModal.click();
+        this.resultText.innerText = `Correct inputs: ${this.correctAnswer}\nWrong inputs: ${this.rounds - this.correctAnswer}`;
+    }
+    
+    resetScore(){
+        this.score = 0;
+        this.correctAnswer = 0;
     }
 }
 
@@ -127,85 +135,84 @@ class Numpad {
     }
 }
 
-function main(){
-    // Start the game
-    var game = new Game();
-    var startButton = document.getElementById("button_play")!;
+// Start the game
+var game = new Game();
+var startButton = document.getElementById("button_play")!;
 
-    var intervalGame: any;
-    startButton.addEventListener("click", function () {
-        if(game.currentlyPlaying == true){
-            return;
-        }
-        else{
-            game.toggle(true);
+var intervalGame: any;
+startButton.addEventListener("click", function () {
+    game.resetScore();
+    if(game.currentlyPlaying == true){
+        return;
+    }
+    else{
+        game.toggle(true);
+    
+        var curRounds = 0;
+        var tempNumber = 0;
+        var min = 1;
+        var max = 0;
         
-            var curRounds = 0;
-            var tempNumber = 0;
-            var min = 1;
-            var max = 0;
+        intervalGame = setInterval(function(){
+            userInput.currentNumber = 0;
             
-            intervalGame = setInterval(function(){
-                userInput.currentNumber = 0;
-                
-                userInput.clearContent();
-                userInput.clearColor();
-                userInput.activateNumpad(numpadList, false);
-                
-                if(curRounds % 2 == 0){
-                    max = game.limit - 1 - userInput.getNumber(1);
-                    tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                    userInput.numberList.set(0, tempNumber);
-                }
-                else{
-                    max = game.limit - 1 - userInput.getNumber(0);
-                    tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-                    userInput.numberList.set(1, tempNumber);
-                }
-                game.playAudio(numberAndFilenameMap.get(tempNumber));
-    
-                if(curRounds != 0){
-                    userInput.activateNumpad(numpadList, true);
-                }
-                
-                console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
-                setTimeout(function(){
-                    if(curRounds == game.rounds + 1){
-                        window.clearInterval(intervalGame);
-                        console.log(`Final Score: ${game.correctAnswer}`);
-                        game.resultsShow();
-                    }
-                }, game.speed - 200);
-                    
-                game.decreaseRounds(game.rounds - curRounds);
-                curRounds += 1;
-            }, game.speed);
-        }
-    });
+            userInput.clearContent();
+            userInput.clearColor();
+            userInput.activateNumpad(numpadList, false);
+            
+            if(curRounds % 2 == 0){
+                max = game.limit - 1 - userInput.getNumber(1);
+                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                userInput.numberList.set(0, tempNumber);
+            }
+            else{
+                max = game.limit - 1 - userInput.getNumber(0);
+                tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                userInput.numberList.set(1, tempNumber);
+            }
+            game.playAudio(numberAndFilenameMap.get(tempNumber));
 
-    var resetButton = document.getElementById("button_reset")!;
-    resetButton.addEventListener("click", function () {
-        game.toggle(false);
-        window.clearInterval(intervalGame);
-    });
-
-    
-    // Set the numpad to its functionality
-    var userInput = new UserInput(); 
-    var numpadList = Array<Numpad>();
-    var numpadArrayName = ["button_zero", "button_one", "button_two", "button_three", "button_four", "button_five", "button_six", "button_seven", "button_eight", "button_nine"];
-    for (var i = 0; i < numpadArrayName.length; i++) {
-        var numpad = new Numpad(numpadArrayName[i], i);
-        numpadList.push(numpad);
-        numpad.setNumpadFunctinoality(numpad, userInput, game, numpadList);
+            if(curRounds != 0){
+                userInput.activateNumpad(numpadList, true);
+            }
+            
+            console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
+            setTimeout(function(){
+                if(curRounds == game.rounds + 1){
+                    window.clearInterval(intervalGame);
+                    console.log(`Final Score: ${game.correctAnswer}`);
+                    game.resultsShow();
+                }
+            }, game.speed - 200);
+                
+            game.decreaseRounds(game.rounds - curRounds);
+            curRounds += 1;
+        }, game.speed);
     }
+});
 
-    const numberAndFilenameMap = new Map();
-    var filenameSFX = ["sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
-    var number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    for(var i = 0; i < filenameSFX.length; i++){
-        numberAndFilenameMap.set(number[i], "../../static/sfx/" + filenameSFX[i] + ".wav");
-    }
+var resetButton = document.getElementById("button_reset")!;
+resetButton.addEventListener("click", function () {
+    game.toggle(false);
+    game.resetScore();
+    window.clearInterval(intervalGame);
+    startButton.click();
+});
+
+
+// Set the numpad to its functionality
+var userInput = new UserInput(); 
+var numpadList = Array<Numpad>();
+var numpadArrayName = ["button_zero", "button_one", "button_two", "button_three", "button_four", "button_five", "button_six", "button_seven", "button_eight", "button_nine"];
+for (var i = 0; i < numpadArrayName.length; i++) {
+    var numpad = new Numpad(numpadArrayName[i], i);
+    numpadList.push(numpad);
+    numpad.setNumpadFunctinoality(numpad, userInput, game, numpadList);
 }
 
-main();
+const numberAndFilenameMap = new Map();
+var filenameSFX = ["sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
+var number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+for(var i = 0; i < filenameSFX.length; i++){
+    numberAndFilenameMap.set(number[i], "../../static/sfx/" + filenameSFX[i] + ".wav");
+}
