@@ -7,6 +7,7 @@ class Game {
         this.speed = 3000;
         this.limit = 9;
         this.correctAnswer = 0;
+        this.playButton = document.getElementById("button_play");
         this.gameCurrentRounds = document.getElementById("countdown_rounds");
         this.resultModal = document.getElementById("resultShower");
         this.resultText = document.getElementById("resultContent");
@@ -18,6 +19,12 @@ class Game {
     }
     toggle(toggleTo) {
         this.currentlyPlaying = toggleTo;
+        if (!toggleTo) {
+            this.playButton.innerText = "Play";
+        }
+        else {
+            this.playButton.innerText = "Stop";
+        }
     }
     playAudio(audioHTMLObject) {
         console.log(audioHTMLObject);
@@ -50,8 +57,19 @@ class UserInput {
         }
     }
     changeNumber(numpadNum) {
-        this.currentNumber = numpadNum;
-        this.displayNumber.textContent = numpadNum.toString();
+        this.currentNumber = parseInt(this.currentNumber.toString() + numpadNum.toString());
+        this.displayNumber.textContent = this.currentNumber.toString();
+    }
+    removeDigit() {
+        var temp = this.currentNumber.toString();
+        if (temp.length != 1) {
+            temp = temp.slice(0, -1);
+        }
+        else {
+            temp = "0";
+        }
+        this.currentNumber = parseInt(temp);
+        this.displayNumber.textContent = this.currentNumber.toString();
     }
     clearContent() {
         this.currentNumber = 0;
@@ -83,18 +101,25 @@ class Numpad {
     }
     setNumpadFunctinoality(numpad, userInput, game, numpadList) {
         var number = document.getElementById(this.numpadName);
-        number.addEventListener("click", function () {
-            userInput.changeNumber(numpad.inputNumber);
-            if (numpad.answer == true) {
-                var answer = userInput.checkAnswer();
-                userInput.changeColor(answer);
-                game.correctAnswer += answer;
-                if (answer == 1) {
-                    console.log("Correct");
-                    userInput.activateNumpad(numpadList, false);
+        if (numpad.numpadName == "button_delete") {
+            number.addEventListener("click", function () {
+                userInput.removeDigit();
+            });
+        }
+        else {
+            number.addEventListener("click", function () {
+                userInput.changeNumber(numpad.inputNumber);
+                if (numpad.answer == true) {
+                    var answer = userInput.checkAnswer();
+                    userInput.changeColor(answer);
+                    game.correctAnswer += answer;
+                    if (answer == 1) {
+                        console.log("Correct");
+                        userInput.activateNumpad(numpadList, false);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     checkAnswerToggle(changeTo) {
         this.answer = changeTo;
@@ -107,7 +132,9 @@ var intervalGame;
 startButton.addEventListener("click", function () {
     game.resetScore();
     if (game.currentlyPlaying == true) {
-        return;
+        game.toggle(false);
+        game.resetScore();
+        window.clearInterval(intervalGame);
     }
     else {
         game.toggle(true);
@@ -147,22 +174,18 @@ startButton.addEventListener("click", function () {
         }, game.speed);
     }
 });
-var resetButton = document.getElementById("button_reset");
-resetButton.addEventListener("click", function () {
-    game.toggle(false);
-    game.resetScore();
-    window.clearInterval(intervalGame);
-    startButton.click();
-});
 // Set the numpad to its functionality
 var userInput = new UserInput();
 var numpadList = Array();
 var numpadArrayName = ["button_zero", "button_one", "button_two", "button_three", "button_four", "button_five", "button_six", "button_seven", "button_eight", "button_nine"];
 for (var i = 0; i < numpadArrayName.length; i++) {
     var numpad = new Numpad(numpadArrayName[i], i);
-    numpadList.push(numpad);
     numpad.setNumpadFunctinoality(numpad, userInput, game, numpadList);
+    numpadList.push(numpad);
 }
+var numpad = new Numpad("button_delete", -1);
+numpad.setNumpadFunctinoality(numpad, userInput, game, numpadList);
+numpadList.push(numpad);
 const numberAndFilenameMap = new Map();
 var filenameSFX = ["sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
 var number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
