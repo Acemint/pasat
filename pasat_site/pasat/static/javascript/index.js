@@ -47,7 +47,7 @@ class UserInput {
     constructor() {
         this.numberList = new Map();
         this.currentNumber = 0;
-        this.displayNumber = document.getElementById("display_number");
+        this.displayNumber = document.getElementById("display-num");
         this.numberList.set(0, 0);
         this.numberList.set(1, 0);
     }
@@ -76,15 +76,15 @@ class UserInput {
         this.displayNumber.textContent = "-";
     }
     neutralizeColor() {
-        this.displayNumber.style.color = "#00000";
+        this.displayNumber.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,.2)";
     }
     changeColor(correct) {
         if (correct == 1) {
-            this.displayNumber.style.color = "green";
+            this.displayNumber.style.boxShadow = "0px 0px 8px 0px #198754";
         }
     }
     clearColor() {
-        this.displayNumber.style.color = "black";
+        this.displayNumber.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,.2)";
     }
     checkAnswer() {
         return this.currentNumber == this.numberList.get(0) + this.numberList.get(1) ? 1 : 0;

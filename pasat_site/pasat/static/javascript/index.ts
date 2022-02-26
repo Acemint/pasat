@@ -103,17 +103,17 @@ class UserInput {
     }
 
     neutralizeColor(){
-        this.displayNumber.style.color = "#00000";
+        this.displayNumber.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,.2)";
     }
 
     changeColor(correct: number){
         if(correct == 1){
-            this.displayNumber.style.borderColor = "#73e493";
+            this.displayNumber.style.boxShadow = "0px 0px 8px 0px #198754";
         }
     }
 
     clearColor(){
-        this.displayNumber.style.color = "black";
+        this.displayNumber.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,.2)";
     }
 
     checkAnswer(){
