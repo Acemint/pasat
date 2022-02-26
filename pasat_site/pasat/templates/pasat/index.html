@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-light navbar-expand-md" style="padding-left: 10px; padding-right: 10px; background-color: #FFEDA9;">
+    <nav class="navbar navbar-light navbar-expand-md py-4" style="padding-left: 10px; padding-right: 10px; background-color: #ffffff;">
         <div class="container-fluid">
             <button class="menu" data-toggle="modal" data-target="#menuModal"><span class="navbar-toggler-icon"></span></button>
             <div class="waktu" id="countdown_rounds">
@@ -20,9 +20,13 @@
             <button class="menu" data-toggle="modal" data-target="#resultModal"><span id="resultShower"><i class="fas fa-trophy"></i></span></button>
         </div>
     </nav>
-    <section style="background: #FFEDA9;">
-        <div class="row align-items-center display">
-            <div class="col display-num" id="display_number"></div>
+    <section>
+        <div class="container numpad">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-xxl-3 text-center display-num">
+                    <p id="display_number"></p>
+                </div>
+            </div>
         </div>
     </section>
     <section>
@@ -31,7 +35,7 @@
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
                         <button class="btn btn-primary number satu" type="button" id="button_one">1</button>
-                        <button class="btn btn-primary number" type="button number" id="button_two">2</button>
+                        <button class="btn btn-primary number dua" type="button number" id="button_two">2</button>
                         <button class="btn btn-primary number tiga" type="button number" id="button_three">3</button>
                     </div>
                 </div>
@@ -39,18 +43,18 @@
             <div class="row justify-content-center align-items-center">
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-primary number" type="button" id="button_four">4</button>
-                        <button class="btn btn-primary number" type="button" id="button_five">5</button>
-                        <button class="btn btn-primary number" type="button" id="button_six">6</button>
+                        <button class="btn btn-primary number empat" type="button" id="button_four">4</button>
+                        <button class="btn btn-primary number lima" type="button" id="button_five">5</button>
+                        <button class="btn btn-primary number enam" type="button" id="button_six">6</button>
                     </div>
                 </div>
             </div>
             <div class="row justify-content-center align-items-center">
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
-                        <button class="btn btn-primary number" type="button" id="button_seven">7</button>
-                        <button class="btn btn-primary number" type="button" id="button_eight">8</button>
-                        <button class="btn btn-primary number" type="button" id="button_nine">9</button>
+                        <button class="btn btn-primary number tujuh" type="button" id="button_seven">7</button>
+                        <button class="btn btn-primary number delapan" type="button" id="button_eight">8</button>
+                        <button class="btn btn-primary number sem" type="button" id="button_nine">9</button>
                     </div>
                 </div>
             </div>
@@ -58,16 +62,16 @@
                 <div class="col-xxl-3 text-center">
                     <div class="btn-group" role="group">
                         <button class="btn btn-primary number play" type="button" id="button_play">Play</button>
-                        <button class="btn btn-primary number" type="button" id="button_zero">0</button>
+                        <button class="btn btn-primary number nol" type="button" id="button_zero">0</button>
                         <button class="btn btn-primary number del" type="button" id="button_delete">Del</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <footer style="background: #FFEDA9;">
-        <div class="row align-items-center display">
-            <div class="col" style="font-size: 28px;">N = 2</div>
+    <footer>
+        <div class="row justify-content-center align-items-center">
+            <div class="col text-center display-footer"><p id="display_number">N = 2</p></div>
         </div>
     </footer>
     
@@ -84,14 +88,14 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="inputGroupSelect01">Difficulty</label>
                         <select class="form-select" id="inputGroupSelect01">
-                          <option value="1">Easy</option>
-                          <option value="2">Medium</option>
+                            <option value="1">Easy</option>
+                            <option value="2">Medium</option>
                         </select>
                       </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="difficulty_changer">Save changes</button>
+                    <button type="button" class="btn btn-success">Save changes</button>
                 </div>
             </div>
         </div>

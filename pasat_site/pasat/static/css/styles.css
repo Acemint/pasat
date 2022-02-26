@@ -4,10 +4,18 @@
     box-sizing: border-box;
 }
 
+nav {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+}
+
 .number {
-    width: 94px;
-    height: 86px;
+    width: 108px;
+    height: 100px;
     font-size: 28px;
+}
+
+div.col-xxl-3.text-center {
+    padding: 0;
 }
 
 .numpad {
@@ -31,17 +39,35 @@
     border-bottom-right-radius: 20px;
 }
 
-.display{
-    background-color: #FFEDA9;
-    width: 100%;
-    text-align: center;
-    height: 90px;
+.display-num {
+    font-size: 34px;
+    background-color: #ffffff9d;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    height: 70px;
     user-select: none;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.display-num {
-    font-size: 42px;
-    background-color: #FFEDA9;
+.display-footer {
+    font-size: 34px;
+    background-color: #ffffff9d;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,.2);
+    height: 70px;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+p {
+    margin: 0;
+}
+
+.col-xxl {
+    padding: 0;
 }
 
 footer {
@@ -68,11 +94,15 @@ body {
 }
 
 .menu {
-    background-color: #FFEDA9;
+    background-color: #ffffff;
     border: none;
 }
 
 .waktu {
     user-select: none;
     font-size: 28px;
+}
+
+.row {
+    margin: 0!important;
 }
