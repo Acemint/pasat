@@ -12,7 +12,7 @@ class Game {
 
     constructor(){
         this.currentlyPlaying = false;
-        this.rounds = 3;
+        this.rounds = 30;
         this.score = 0;
         this.speed = 2500;
         this.limit = 9;
@@ -215,11 +215,17 @@ startButton.addEventListener("click", function () {
             
             if(curRounds % 2 == 0){
                 max = game.limit - 1 - userInput.getNumber(1);
+                if(max > 9){
+                    max = 9;
+                }
                 tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                 userInput.numberList.set(0, tempNumber);
             }
             else{
                 max = game.limit - 1 - userInput.getNumber(0);
+                if(max > 9){
+                    max = 9;
+                }
                 tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                 userInput.numberList.set(1, tempNumber);
             }
@@ -239,6 +245,7 @@ startButton.addEventListener("click", function () {
                 setTimeout(step, Math.max(0, game.speed - dt));
                 // Play audio
                 console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
+                // console.log(tempNumber);
                 game.playAudio(numberAndFilenameMap.get(tempNumber));
                 game.decreaseRounds(game.rounds - curRounds);
                 curRounds++;
