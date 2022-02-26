@@ -110,9 +110,6 @@ class UserInput {
         if(correct == 1){
             this.displayNumber.style.color = "green";
         }
-        else{
-            this.displayNumber.style.color = "red";
-        }
     }
 
     clearColor(){
