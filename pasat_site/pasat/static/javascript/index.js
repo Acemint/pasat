@@ -177,14 +177,12 @@ startButton.addEventListener("click", function () {
                 userInput.activateNumpad(numpadList, true);
             }
             console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
-            setTimeout(function () {
-                if (curRounds == game.rounds + 1) {
-                    window.clearInterval(intervalGame);
-                    console.log(`Final Score: ${game.correctAnswer}`);
-                    userInput.neutralizeColor();
-                    game.resultsShow();
-                }
-            }, game.speed - 200);
+            if (curRounds == game.rounds + 1) {
+                window.clearInterval(intervalGame);
+                console.log(`Final Score: ${game.correctAnswer}`);
+                userInput.neutralizeColor();
+                game.resultsShow();
+            }
             game.decreaseRounds(game.rounds - curRounds);
             curRounds += 1;
         }, game.speed);
