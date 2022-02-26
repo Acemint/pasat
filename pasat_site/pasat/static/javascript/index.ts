@@ -68,7 +68,7 @@ class UserInput {
         
     constructor(){
         this.currentNumber = 0;
-        this.displayNumber = document.getElementById("display_number")!;
+        this.displayNumber = document.getElementById("display-num")!;
         this.numberList.set(0, 0);
         this.numberList.set(1, 0);
     }
@@ -108,7 +108,7 @@ class UserInput {
 
     changeColor(correct: number){
         if(correct == 1){
-            this.displayNumber.style.color = "green";
+            this.displayNumber.style.borderColor = "#73e493";
         }
     }
 
