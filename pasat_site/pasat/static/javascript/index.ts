@@ -181,14 +181,13 @@ difficultyChanger.addEventListener("click", function(){
 
 
 var startButton = document.getElementById("button_play")!;
-
-var intervalGame: any;
+var intervalTimer: any;
 startButton.addEventListener("click", function () {
     game.resetScore();
     if(game.currentlyPlaying == true){
+        window.clearInterval(intervalTimer);
         game.toggle(false);
         game.resetScore();
-        window.clearInterval(intervalGame);
     }
     else{
         game.toggle(true);
@@ -199,7 +198,7 @@ startButton.addEventListener("click", function () {
         var max = 0;
         
         var expected = Date.now() + game.speed;
-        setTimeout(step, game.speed);
+        intervalTimer = setTimeout(step, game.speed);
         function step() {
             var dt = Date.now() - expected; // the drift (positive for overshooting)
     
@@ -239,7 +238,7 @@ startButton.addEventListener("click", function () {
                 game.resultsShow();
             }
             else{
-                setTimeout(step, Math.max(0, game.speed - dt));
+                intervalTimer = setTimeout(step, Math.max(0, game.speed - dt));
                 // Play audio
                 console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
                 // console.log(tempNumber);

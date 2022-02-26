@@ -82,9 +82,6 @@ class UserInput {
         if (correct == 1) {
             this.displayNumber.style.color = "green";
         }
-        else {
-            this.displayNumber.style.color = "red";
-        }
     }
     clearColor() {
         this.displayNumber.style.color = "black";
@@ -143,13 +140,13 @@ difficultyChanger.addEventListener("click", function () {
     console.log(difficulty.value);
 });
 var startButton = document.getElementById("button_play");
-var intervalGame;
+var intervalTimer;
 startButton.addEventListener("click", function () {
     game.resetScore();
     if (game.currentlyPlaying == true) {
+        window.clearInterval(intervalTimer);
         game.toggle(false);
         game.resetScore();
-        window.clearInterval(intervalGame);
     }
     else {
         game.toggle(true);
@@ -158,7 +155,7 @@ startButton.addEventListener("click", function () {
         var min = 1;
         var max = 0;
         var expected = Date.now() + game.speed;
-        setTimeout(step, game.speed);
+        intervalTimer = setTimeout(step, game.speed);
         function step() {
             var dt = Date.now() - expected; // the drift (positive for overshooting)
             //call a round
@@ -192,7 +189,7 @@ startButton.addEventListener("click", function () {
                 game.resultsShow();
             }
             else {
-                setTimeout(step, Math.max(0, game.speed - dt));
+                intervalTimer = setTimeout(step, Math.max(0, game.speed - dt));
                 // Play audio
                 console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
                 // console.log(tempNumber);
