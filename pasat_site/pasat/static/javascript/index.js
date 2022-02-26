@@ -2,7 +2,7 @@
 class Game {
     constructor() {
         this.currentlyPlaying = false;
-        this.rounds = 30;
+        this.rounds = 3;
         this.score = 0;
         this.speed = 2500;
         this.limit = 9;
@@ -157,7 +157,11 @@ startButton.addEventListener("click", function () {
         var tempNumber = 0;
         var min = 1;
         var max = 0;
-        intervalGame = setInterval(function () {
+        var expected = Date.now() + game.speed;
+        setTimeout(step, game.speed);
+        function step() {
+            var dt = Date.now() - expected; // the drift (positive for overshooting)
+            //call a round
             userInput.currentNumber = 0;
             userInput.clearContent();
             userInput.clearColor();
@@ -172,20 +176,25 @@ startButton.addEventListener("click", function () {
                 tempNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                 userInput.numberList.set(1, tempNumber);
             }
-            game.playAudio(numberAndFilenameMap.get(tempNumber));
+            // Enable numpad to set answer
             if (curRounds != 0) {
                 userInput.activateNumpad(numpadList, true);
             }
-            console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
             if (curRounds == game.rounds + 1) {
-                window.clearInterval(intervalGame);
                 console.log(`Final Score: ${game.correctAnswer}`);
                 userInput.neutralizeColor();
                 game.resultsShow();
             }
-            game.decreaseRounds(game.rounds - curRounds);
-            curRounds += 1;
-        }, game.speed);
+            else {
+                setTimeout(step, Math.max(0, game.speed - dt));
+                // Play audio
+                console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
+                game.playAudio(numberAndFilenameMap.get(tempNumber));
+                game.decreaseRounds(game.rounds - curRounds);
+                curRounds++;
+                expected += game.speed;
+            }
+        }
     }
 });
 // Set the numpad to its functionality
