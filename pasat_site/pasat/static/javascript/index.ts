@@ -12,9 +12,9 @@ class Game {
 
     constructor(){
         this.currentlyPlaying = false;
-        this.rounds = 5;
+        this.rounds = 30;
         this.score = 0;
-        this.speed = 3000;
+        this.speed = 2500;
         this.limit = 9;
         this.correctAnswer = 0;
         this.playButton = document.getElementById("button_play")!;
@@ -102,6 +102,10 @@ class UserInput {
         this.displayNumber.textContent = "-";
     }
 
+    neutralizeColor(){
+        this.displayNumber.style.color = "#00000";
+    }
+
     changeColor(correct: number){
         if(correct == 1){
             this.displayNumber.style.color = "green";
@@ -165,6 +169,20 @@ class Numpad {
 
 // Start the game
 var game = new Game();
+var difficulty = <HTMLInputElement>document.getElementById("inputGroupSelect01")!;
+var difficultyChanger = document.getElementById("difficulty_changer")!;
+difficultyChanger.addEventListener("click", function(){
+    var difficultyValue = parseInt(difficulty.value)
+    if(difficultyValue == 1){
+        game.changeGameSettings(30, 2500, 9);
+    }
+    else if(difficultyValue == 2){    
+        game.changeGameSettings(30, 2500, 18);
+    }
+    console.log(difficulty.value);
+})
+
+
 var startButton = document.getElementById("button_play")!;
 
 var intervalGame: any;
@@ -211,6 +229,7 @@ startButton.addEventListener("click", function () {
                 if(curRounds == game.rounds + 1){
                     window.clearInterval(intervalGame);
                     console.log(`Final Score: ${game.correctAnswer}`);
+                    userInput.neutralizeColor();
                     game.resultsShow();
                 }
             }, game.speed - 200);
