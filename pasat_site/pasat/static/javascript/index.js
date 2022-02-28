@@ -27,7 +27,6 @@ class Game {
         }
     }
     playAudio(audioHTMLObject) {
-        console.log(audioHTMLObject);
         var audio = new Audio(audioHTMLObject);
         audio.load();
         audio.play();
@@ -115,7 +114,6 @@ class Numpad {
                     userInput.changeColor(answer);
                     game.correctAnswer += answer;
                     if (answer == 1) {
-                        console.log("Correct");
                         userInput.activateNumpad(numpadList, false);
                     }
                 }
@@ -138,7 +136,6 @@ difficultyChanger.addEventListener("click", function () {
     else if (difficultyValue == 2) {
         game.changeGameSettings(30, 2500, 18);
     }
-    console.log(difficulty.value);
 });
 var startButton = document.getElementById("button_play");
 var intervalTimer;
@@ -185,15 +182,12 @@ startButton.addEventListener("click", function () {
                 userInput.activateNumpad(numpadList, true);
             }
             if (curRounds == game.rounds + 1) {
-                console.log(`Final Score: ${game.correctAnswer}`);
                 userInput.neutralizeColor();
                 game.resultsShow();
             }
             else {
                 intervalTimer = setTimeout(step, Math.max(0, game.speed - dt));
                 // Play audio
-                console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}`);
-                // console.log(tempNumber);
                 game.playAudio(numberAndFilenameMap.get(tempNumber));
                 game.decreaseRounds(game.rounds - curRounds);
                 curRounds++;
