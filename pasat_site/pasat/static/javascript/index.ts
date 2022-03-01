@@ -40,8 +40,8 @@ class Game {
     }
 
     playAudio(audioHTMLObject: string){
+        console.log(audioHTMLObject);
         var audio = new Audio(audioHTMLObject);
-        audio.load()
         audio.play();
     }
 
@@ -68,7 +68,7 @@ class UserInput {
         
     constructor(){
         this.currentNumber = 0;
-        this.displayNumber = document.getElementById("display-num")!;
+        this.displayNumber = document.getElementById("display_number")!;
         this.numberList.set(0, 0);
         this.numberList.set(1, 0);
     }
@@ -103,17 +103,17 @@ class UserInput {
     }
 
     neutralizeColor(){
-        this.displayNumber.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,.2)";
+        this.displayNumber.style.color = "#00000";
     }
 
     changeColor(correct: number){
         if(correct == 1){
-            this.displayNumber.style.boxShadow = "0px 0px 8px 0px #198754";
+            this.displayNumber.style.color = "green";
         }
     }
 
     clearColor(){
-        this.displayNumber.style.boxShadow = "0 2px 4px 0 rgba(0,0,0,.2)";
+        this.displayNumber.style.color = "black";
     }
 
     checkAnswer(){
@@ -151,6 +151,7 @@ class Numpad {
                     userInput.changeColor(answer);
                     game.correctAnswer += answer;
                     if(answer == 1){
+                        console.log("Correct");
                         userInput.activateNumpad(numpadList, false);
                     }
                 }
@@ -175,6 +176,7 @@ difficultyChanger.addEventListener("click", function(){
     else if(difficultyValue == 2){    
         game.changeGameSettings(30, 2500, 18);
     }
+    console.log(difficulty.value);
 })
 
 
@@ -231,12 +233,15 @@ startButton.addEventListener("click", function () {
             }
             
             if(curRounds == game.rounds + 1){
+                console.log(`Final Score: ${game.correctAnswer}`);
                 userInput.neutralizeColor();
                 game.resultsShow();
             }
             else{
                 intervalTimer = setTimeout(step, Math.max(0, game.speed - dt));
                 // Play audio
+                console.log(`Answer: ${userInput.numberList.get(0) + userInput.numberList.get(1)} Current Score ${game.correctAnswer} User Input ${userInput.currentNumber}` );
+                // console.log(tempNumber);
                 game.playAudio(numberAndFilenameMap.get(tempNumber));
                 game.decreaseRounds(game.rounds - curRounds);
                 curRounds++;
@@ -267,5 +272,5 @@ const numberAndFilenameMap = new Map();
 var filenameSFX = ["sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
 var number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 for(var i = 0; i < filenameSFX.length; i++){
-    numberAndFilenameMap.set(number[i], "../../static/sfx_mp3/" + filenameSFX[i] + ".mp3");
+    numberAndFilenameMap.set(number[i], "https://steven300900.github.io/pasat/pasat_site/pasat/static/sfx/" + filenameSFX[i] + ".wav");
 }
