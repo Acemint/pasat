@@ -212,5 +212,5 @@ const numberAndFilenameMap = new Map();
 var filenameSFX = ["sfx_1", "sfx_2", "sfx_3", "sfx_4", "sfx_5", "sfx_6", "sfx_7", "sfx_8", "sfx_9"];
 var number = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 for (var i = 0; i < filenameSFX.length; i++) {
-    numberAndFilenameMap.set(number[i], "../../static/sfx/" + filenameSFX[i] + ".wav");
+    numberAndFilenameMap.set(number[i], "../../static/sfx_mp3/" + filenameSFX[i] + ".mp3");
 }
