@@ -131,8 +131,9 @@ var difficulty = document.getElementById("inputGroupSelect01");
 var difficultyChanger = document.getElementById("difficulty_changer");
 difficultyChanger.addEventListener("click", function () {
     var difficultyValue = parseInt(difficulty.value);
+    console.log(difficultyValue);
     if (difficultyValue == 1) {
-        game.changeGameSettings(30, 2500, 9);
+        game.changeGameSettings(30, 4000, 9);
     }
     else if (difficultyValue == 2) {
         game.changeGameSettings(30, 2500, 18);

@@ -14,7 +14,7 @@ class Game {
         this.currentlyPlaying = false;
         this.rounds = 30;
         this.score = 0;
-        this.speed = 2500;
+        this.speed = 4000;
         this.limit = 9;
         this.correctAnswer = 0;
         this.playButton = document.getElementById("button_play")!;
@@ -170,8 +170,9 @@ var difficulty = <HTMLInputElement>document.getElementById("inputGroupSelect01")
 var difficultyChanger = document.getElementById("difficulty_changer")!;
 difficultyChanger.addEventListener("click", function(){
     var difficultyValue = parseInt(difficulty.value)
+    console.log(difficultyValue)
     if(difficultyValue == 1){
-        game.changeGameSettings(30, 2500, 9);
+        game.changeGameSettings(30, 4000, 9);
     }
     else if(difficultyValue == 2){    
         game.changeGameSettings(30, 2500, 18);
